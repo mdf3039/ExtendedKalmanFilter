@@ -58,13 +58,13 @@ public:
    * Updates the state by using standard Kalman Filter equations
    * @param z The measurement at k+1
    */
-  void Update(const VectorXd &y, const MatrixXd &Hj, const MatrixXd &R);
+  void Update(const VectorXd &y, const MatrixXd &H, const MatrixXd &R);
 
   /**
    * Updates the state by using Extended Kalman Filter equations
    * @param z The measurement at k+1
    */
-  void UpdateEKF(const VectorXd &y, const MatrixXd &Hj, const MatrixXd &R);
+  void UpdateEKF(const VectorXd &y_e, const MatrixXd &Hj, const MatrixXd &R_e);
 
 };
 

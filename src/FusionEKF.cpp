@@ -205,7 +205,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     //find K, using the H_jacobian
     Hj_ = CalculateJacobian(ekf_.x_);
 
-    ekf_.Update(y,Hj_,R_radar_);
+    ekf_.UpdateEKF(y,Hj_,R_radar_);
 
 
   }
