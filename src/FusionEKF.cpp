@@ -201,14 +201,19 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     h_of_x << sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2)),
                 atan(ekf_.x_[1]/ekf_.x_[0]),
                 (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
+    #obtain the vector of raw measurements
+    VectorXd z;
+    z = VectorXd(3);
+    z = measurement_pack.raw_measurements_[0],measurement_pack.raw_measurements_[1],
+        measurement_pack.raw_measurements_[2];
     //make sure the angle is between -pi and pi
-    while(measurement_pack.raw_measurements_[1]<-3.14159265){
-        measurement_pack.raw_measurements_[1]+=2*3.14159265;
+    while(z[1]<-3.14159265){
+        z[1]+=2*3.14159265;
     }
-    while(measurement_pack.raw_measurements_[1]>3.14159265){
-        measurement_pack.raw_measurements_[1]-=2*3.14159265;
+    while(z[1]>3.14159265){
+        z[1]-=2*3.14159265;
     }
-    VectorXd y = measurement_pack.raw_measurements_ - h_of_x;
+    VectorXd y = z - h_of_x;
     //find K, using the H_jacobian
     Hj_ = CalculateJacobian(ekf_.x_);
 
