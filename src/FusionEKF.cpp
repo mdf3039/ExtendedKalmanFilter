@@ -211,7 +211,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         float angle_r = -1.0/2.0*pi-atan(ekf_.x_[1]/ekf_.x_[0]);
     }
     else{
-        float angle_r = atan(ekf_.x_[1]/ekf_.x_[0])
+        float angle_r = atan(ekf_.x_[1]/ekf_.x_[0]);
     }
 
     h_of_x << sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2)),
