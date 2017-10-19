@@ -25,11 +25,11 @@ MatrixXd CalculateJacobian(const VectorXd& x_state) {
 	float c3 = (c1*c2);
 
 	//check division by zero
-	if((fabs(c1) < 0.0001) && (c1>=0)){
-		c1 = 0.0001;
+	if((fabs(c1) < 0.00001) && (c1>=0)){
+		c1 = 0.00001;
 	}
-	if((fabs(c1) < 0.0001) && (c1<0)){
-		c1 = -0.0001;
+	if((fabs(c1) < 0.00001) && (c1<0)){
+		c1 = -0.00001;
 	}
 
 	//compute the Jacobian matrix
@@ -198,6 +198,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     //compute y, using h(x)
     VectorXd h_of_x;
     h_of_x = VectorXd(3);
+
     h_of_x << sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2)),
                 atan(ekf_.x_[1]/ekf_.x_[0]),
                 (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
