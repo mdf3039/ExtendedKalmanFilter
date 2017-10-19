@@ -37,6 +37,12 @@ MatrixXd CalculateJacobian(const VectorXd& x_state) {
 		  -(py/c1), (px/c1), 0, 0,
 		  py*(vx*py - vy*px)/c3, px*(px*vy - py*vx)/c3, px/c2, py/c2;
 
+    if ((x_state(0)<0)&&(x_state(1)<0)){
+        Hj << (px/c2), (py/c2), 0, 0,
+            (py/c1), -(px/c1), 0, 0,
+            py*(vx*py - vy*px)/c3, px*(px*vy - py*vx)/c3, px/c2, py/c2;
+    }
+
 	return Hj;
 }
 
