@@ -158,9 +158,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
      * Update the process noise covariance matrix.
      * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
    */
-  if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+  /*if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     return;
-  }
+  }*/
   float noise_ax = 9;
   float noise_ay = 9;
   //compute the time elapsed between the current and previous measurements
@@ -202,8 +202,20 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     VectorXd h_of_x;
     h_of_x = VectorXd(3);
 
+    //calculate angle, given the quadrant X and Y values are in
+    float pi = 3.14159265;
+    if ((ekf_.x_[0]<0)&&(ekf_.x_[1]>0)){
+        float angle_r = pi+atan(ekf_.x_[1]/ekf_.x_[0]);
+    }
+    else if ((ekf_.x_[0]<0)&&(ekf_.x_[1]<0)){
+        float angle_r = -1.0/2.0*pi-atan(ekf_.x_[1]/ekf_.x_[0]);
+    }
+    else{
+        float angle_r = atan(ekf_.x_[1]/ekf_.x_[0])
+    }
+
     h_of_x << sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2)),
-                atan(ekf_.x_[1]/ekf_.x_[0]),
+                angle_r,
                 (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
     //obtain the vector of raw measurements
     VectorXd z;
