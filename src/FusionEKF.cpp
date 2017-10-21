@@ -14,11 +14,11 @@ MatrixXd CalculateJacobian(const VectorXd& x_state) {
     //obtain negations when needed
     float a = 1.0;
     if (x_state(0)<0){
-        a = -1.0;
+        a = 1.0;
     }
     float b = 1.0;
     if (x_state(1)<0){
-        b = -1.0;
+        b = 1.0;
     }
 	MatrixXd Hj(3,4);
 	//recover state parameters
