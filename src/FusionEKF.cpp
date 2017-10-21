@@ -11,13 +11,21 @@ using Eigen::VectorXd;
 using std::vector;
 
 MatrixXd CalculateJacobian(const VectorXd& x_state) {
-
+    //obtain negations when needed
+    float a = 1.0
+    if (x_state(0)<0){
+        a = -1.0
+    }
+    float b = 1.0
+    if (x_state(1)<0){
+        b = -1.0
+    }
 	MatrixXd Hj(3,4);
 	//recover state parameters
 	float px = x_state(0);
 	float py = x_state(1);
-	float vx = x_state(2);
-	float vy = x_state(3);
+	float vx = x_state(2)*a;
+	float vy = x_state(3)*b;
 
 	//pre-compute a set of terms to avoid repeated calculation
 	float c1 = px*px+py*py;
@@ -214,16 +222,16 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     float range_rate = (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
     if ((ekf_.x_[0]<0)&&(ekf_.x_[1]>0)){
         float angle_r = pi+atan(ekf_.x_[1]/ekf_.x_[0]);
-        range_rate = (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
+        range_rate = (ekf_.x_[0]*-1.0*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
     }
     else if ((ekf_.x_[0]<0)&&(ekf_.x_[1]<0)){
         float angle_r = -1.0*pi+atan(ekf_.x_[1]/ekf_.x_[0]);
-        range_rate = (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
+        range_rate = (ekf_.x_[0]*-1.0*ekf_.x_[2]+ekf_.x_[1]*-1.0*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
     }
 
     h_of_x << sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2)),
                 angle_r,
-                (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
+                range_rate;
     //obtain the vector of raw measurements
     VectorXd z;
     z = VectorXd(3);
