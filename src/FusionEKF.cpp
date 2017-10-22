@@ -62,7 +62,7 @@ FusionEKF::FusionEKF() {
   float previous_velocity_y = 0.0;
   float previous_dt = 0.1;
   bool first_observation = true;
-  MatrixXd(4, 1) acc_v;
+  acc_v = MatrixXd(4, 1);
 
   // initializing matrices
   //measurement covariance

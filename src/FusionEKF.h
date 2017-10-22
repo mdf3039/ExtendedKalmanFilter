@@ -41,7 +41,7 @@ private:
   float previous_velocity_y;
   float previous_dt;
   bool first_observation;
-  Eigen::MatrixXd(4, 1) acc_v;
+  Eigen::MatrixXd acc_v;
 
   // tool object used to compute Jacobian and RMSE
   Tools tools;
