@@ -136,6 +136,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     ekf_.x_ = VectorXd(4);
     ekf_.x_ << 1, 1, 1, 1;
     previous_timestamp_ = measurement_pack.timestamp_;
+    float previous_velocity_x = 0.0;
+    float previous_velocity_y = 0.0;
+    float previous_dt = 0.1;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
@@ -192,8 +195,21 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
              0, dt_4/4*noise_ay, 0, dt_3/2*noise_ay,
              dt_3/2*noise_ax, 0, dt_2*noise_ax, 0,
              0, dt_3/2*noise_ay, 0, dt_2*noise_ay;
+  //Obtain the acceleration vector so it can affect the position and velocity
+  float acc_x = (ekf_.x_[2]-previous_velocity_x)/previous_dt;
+  float acc_y = (ekf_.x_[3]-previous_velocity_y)/previous_dt;
+  //put into vector to be passed to predict function
+  VectorXd acc;
+  acc = VectorXd(2);
+  acc << acc_x, acc_y;
+  //update the previous velocities and dt
+  previous_velocity_x = ekf_.x_[2]+acc_x*dt;
+  previous_velocity_y = ekf_.x_[3]+acc_y*dt;
+  previous_dt = dt;
 
-  ekf_.Predict();
+
+
+  ekf_.Predict(acc);
 
   /*****************************************************************************
    *  Update

@@ -20,12 +20,17 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
   Q_ = Q_in;
 }
 
-void KalmanFilter::Predict() {
+void KalmanFilter::Predict(const VectorXd &acc, const float dt) {
   /**
   TODO:
     * predict the state
   */
   x_ = F_ * x_;
+  //the x_ is obtained; add in the effect of acc to the four components
+  x_[0] = x_[0]+0.5*acc[0]*dt*dt;
+  x_[1] = x_[1]+0.5*acc[1]*dt*dt;
+  x_[2] = x_[2]+acc[0]*dt;
+  x_[3] = x_[3]+acc[1]*dt;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
 }
