@@ -62,6 +62,7 @@ FusionEKF::FusionEKF() {
   float previous_velocity_y = 0.0;
   float previous_dt = 0.1;
   bool first_observation = true;
+  acc_v = MatrixXd(4, 1);
 
   // initializing matrices
   //measurement covariance
@@ -203,11 +204,18 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   //Obtain the acceleration vector so it can affect the position and velocity
   float acc_x = (ekf_.x_[2]-previous_velocity_x)/previous_dt;
   float acc_y = (ekf_.x_[3]-previous_velocity_y)/previous_dt;
+  //when using acceleration, the Q is known. Find new covariance matrix
+  acc_v = MatrixXd(4, 1);
+  acc_v << acc_x*dt*dt/2, acc_y*dt*dt/2, acc_x*dt, acc_y*dt;
+  if (first_observation=false){
+    ekf_.Q_ = acc_v*acc_v.transpose();
+  }
   if (first_observation=true){
     acc_x = 0.0;
     acc_y = 0.0;
-    //first_observation = false;
+    first_observation = false;
   }
+
   //put into vector to be passed to predict function
   VectorXd acc;
   acc = VectorXd(2);
