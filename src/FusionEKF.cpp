@@ -215,7 +215,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
     //calculate angle, given the quadrant X and Y values are in
     float pi = 3.14159265;
-    float angle_r = atan2(ekf_.x_[1]/ekf_.x_[0]);
+    float angle_r = atan2(ekf_.x_[1],ekf_.x_[0]);
     float range_rate = (ekf_.x_[0]*ekf_.x_[2]+ekf_.x_[1]*ekf_.x_[3])/sqrt(pow(ekf_.x_[0],2)+pow(ekf_.x_[1],2));
     /*if ((ekf_.x_[0]<0)&&(ekf_.x_[1]>0)){
         //float angle_r = pi+atan(ekf_.x_[1]/ekf_.x_[0]);
