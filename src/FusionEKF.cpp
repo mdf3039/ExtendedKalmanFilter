@@ -276,8 +276,11 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     }
     //if the difference between the two angles is more than 2.5 (arbitrary number close to pi),
     //add pi
-    if (std::abs(z[1]-h_of_x[1])>2.5){
+    if ((std::abs(z[1]-h_of_x[1])>2.5))&&(std::abs(z[1]-h_of_x[1])<5.0)){
         h_of_x[1] = h_of_x[1]+pi;
+    }
+    else if (std::abs(z[1]-h_of_x[1])>5){
+        h_of_x[1] = h_of_x[1]+2.0*pi;
     }
 
     VectorXd y = z - h_of_x;
