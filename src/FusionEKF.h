@@ -37,6 +37,9 @@ private:
 
   // previous timestamp
   long long previous_timestamp_;
+  float previous_velocity_x;
+  float previous_velocity_y;
+  float previous_dt;
 
   // tool object used to compute Jacobian and RMSE
   Tools tools;

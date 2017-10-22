@@ -58,6 +58,9 @@ FusionEKF::FusionEKF() {
   is_initialized_ = false;
 
   previous_timestamp_ = 0;
+  float previous_velocity_x = 0.0;
+  float previous_velocity_y = 0.0;
+  float previous_dt = 0.1;
 
   // initializing matrices
   //measurement covariance
