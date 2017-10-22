@@ -206,7 +206,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   if (first_observation=true){
     acc_x = 0.0;
     acc_y = 0.0;
-    first_observation = false;
+    //first_observation = false;
   }
   //put into vector to be passed to predict function
   VectorXd acc;
