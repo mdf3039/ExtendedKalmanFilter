@@ -244,6 +244,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     while(z[1]>3.14159265){
         z[1]-=2*3.14159265;
     }
+    //if the difference between the two angles is more than 2.5 (arbitrary number close to pi),
+    //add pi
+    if abs(z[1]-h_of_x[1])>2.5{
+        h_of_x[1] = h_of_x[1]+pi;
+    }
+
     VectorXd y = z - h_of_x;
     //find K, using the H_jacobian
     Hj_ = CalculateJacobian(ekf_.x_);
