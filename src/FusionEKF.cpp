@@ -280,7 +280,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         h_of_x[1] = h_of_x[1]+pi;
     }
     else if (std::abs(z[1]-h_of_x[1])>5){
-        h_of_x[1] = h_of_x[1]+2.0*pi;
+        h_of_x[1] = std::abs(h_of_x[1]);
     }
 
     VectorXd y = z - h_of_x;
