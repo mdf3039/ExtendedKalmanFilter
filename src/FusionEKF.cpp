@@ -61,6 +61,7 @@ FusionEKF::FusionEKF() {
   float previous_velocity_x = 0.0;
   float previous_velocity_y = 0.0;
   float previous_dt = 0.1;
+  bool first_observation = true;
 
   // initializing matrices
   //measurement covariance
@@ -76,8 +77,8 @@ FusionEKF::FusionEKF() {
   ekf_.P_ = MatrixXd(4, 4);
   //the initial transition matrix F_
   ekf_.F_ = MatrixXd(4, 4);
-  float noise_ax = 13.0;
-  float noise_ay = 13.0;
+  float noise_ax = 9.0;
+  float noise_ay = 9.0;
 
   //measurement covariance matrix - laser
   R_laser_ << 0.0225, 0,
@@ -142,6 +143,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     float previous_velocity_x = 0.0;
     float previous_velocity_y = 0.0;
     float previous_dt = 0.1;
+    bool first_observation = true;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
@@ -178,8 +180,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     return;
   }*/
-  float noise_ax = 13;
-  float noise_ay = 13;
+  float noise_ax = 9;
+  float noise_ay = 9;
   //compute the time elapsed between the current and previous measurements
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;	//dt - expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_;
@@ -201,6 +203,11 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   //Obtain the acceleration vector so it can affect the position and velocity
   float acc_x = (ekf_.x_[2]-previous_velocity_x)/previous_dt;
   float acc_y = (ekf_.x_[3]-previous_velocity_y)/previous_dt;
+  if (first_observation=true){
+    acc_x = 0.0;
+    acc_y = 0.0;
+    first_observation = false;
+  }
   //put into vector to be passed to predict function
   VectorXd acc;
   acc = VectorXd(2);
@@ -209,7 +216,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   previous_velocity_x = ekf_.x_[2]+acc_x*dt;
   previous_velocity_y = ekf_.x_[3]+acc_y*dt;
   previous_dt = dt;
-
 
 
   ekf_.Predict(acc,dt);
