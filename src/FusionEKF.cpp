@@ -246,7 +246,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     }
     //if the difference between the two angles is more than 2.5 (arbitrary number close to pi),
     //add pi
-    if std::abs(z[1]-h_of_x[1])>2.5{
+    if (std::abs(z[1]-h_of_x[1])>2.5){
         h_of_x[1] = h_of_x[1]+pi;
     }
 
