@@ -212,7 +212,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
 
 
-  ekf_.Predict(acc);
+  ekf_.Predict(acc,dt);
 
   /*****************************************************************************
    *  Update
